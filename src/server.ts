@@ -1,10 +1,18 @@
-import express from 'express';
+import fastify, { FastifyInstance } from 'fastify';
 
-const app = express();
-app.use(express.json());
+const app: FastifyInstance = fastify({ logger: true });
 
-app.get('/', (req, res) => {
-  res.send('Location /');
+app.get('/', (request, reply) => {
+  return { hello: 'world' };
 });
 
-app.listen(3333, () => console.log('Server started on port 3333'));
+const start = async () => {
+  try {
+    await app.listen({ port: 3000 });
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+};
+
+start();
